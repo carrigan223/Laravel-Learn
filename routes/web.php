@@ -26,9 +26,22 @@ Route::get('/', function () {
     return view('posts');
 });
 
-Route::get('/post', function () {
-    return view('post', [
-        'post' => '<h1>Hello World</h1>' // $post
-    ]);
-});
+//setting the route to retrieve based on the slug
+Route::get('/post/{post}', function ($slug) {
+    $path = __DIR__ . "/../resources/posts/{$slug}.html";
+    if(! file_exists($path)) {
+        //ddd("this will throw the debug screen")
+        //abort(404); this will load a not found screen
+        return redirect("/");
+    };
 
+    //cacheing for one hour 
+    $post = cache() -> remember("posts.{$slug}", 3600, function () use($path) {
+        //var_dump('file_get_contents'); this will dump to the top of the page
+        return file_get_contents($path);
+    });
+    
+    return view('post', [
+        'post' => $post
+    ]);
+}) -> where('post', '[a-z_\-]+');
