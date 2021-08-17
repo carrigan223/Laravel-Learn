@@ -16,9 +16,19 @@ use Illuminate\Support\Facades\Route;
 //view is something the user sees
 //resources/views/welcome.blade.php
 //do not need .blade.php
+// Route::get('/', function () {
+//     return view('welcome');
+//     //return "hello world";//
+//     // return ["foo" => "bar"];
+// });
+
 Route::get('/', function () {
-    return view('welcome');
-    //return "hello world";//
-    // return ["foo" => "bar"];
+    return view('posts');
+});
+
+Route::get('/post', function () {
+    return view('post', [
+        'post' => '<h1>Hello World</h1>' // $post
+    ]);
 });
 
